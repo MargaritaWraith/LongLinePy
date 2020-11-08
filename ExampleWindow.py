@@ -9,6 +9,7 @@ from PyQt5.QtWidgets import * #Чтобы не париться)
 #from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
 #from PyQt5.QtWidgets import (QWidget, QLabel, QLineEdit, QTextEdit, QGridLayout, QApplication)
 from PyQt5.QtGui import QIcon #для иконки окошка
+from PyQt5.QtCore import QCoreApplication #для кнопки выхода
 
 # Класс QtWidgets.QDesktopWidget предоставляет информацию о компьютере пользователя, в том числе о размерах экрана.
 
@@ -59,6 +60,10 @@ class Example(QWidget):
         self.setWindowTitle('Длинная линия') #Метод устанавливает заголовок приложения. 
         self.setWindowIcon(QIcon('WindowIcon1.png'))#Чтобы установить иконку, создаём объект QIcon. QIcon получает путь к нашей иконке для отображения.
 
+        qbtn = QPushButton('Выход', self)
+        qbtn.clicked.connect(self.closeEvent)  #Выход сразу: qbtn.clicked.connect(QCoreApplication.instance().quit)
+        qbtn.resize(qbtn.sizeHint())
+
         self.show()
 
     # Метод центрирования окна (из библиотеки QDesktopWidget)
@@ -68,6 +73,12 @@ class Example(QWidget):
         qr.moveCenter(cp) #Наш прямоугольник уже имеет ширину и высоту. Теперь мы установили центр прямоугольника в центре экрана. Размер прямоугольника не изменяется.
         self.move(qr.topLeft()) #Мы двигаем верхний левый угол окна приложения в верхний левый угол прямоугольника qr, таким образом, центрируя окно на нашем экране.
 
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', "Are you sure to quit?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore() 
 
 
 #Создаются объекты application и Example. Запускается основной цикл.

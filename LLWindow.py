@@ -3,6 +3,7 @@
 import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QIcon #для иконки окошка
+from PyQt5.QtCore import QCoreApplication #для кнопки выхода
 
 
 class LLWin(QWidget):
@@ -24,7 +25,7 @@ class LLWin(QWidget):
         RnEdit = QLineEdit()
         XnEdit = QLineEdit()
 
-        Zn = QLabel('Zн = Rн + Xн')
+        Zn = QLabel('Zн = Rн + jXн')
         
 
         grid = QGridLayout()
@@ -43,6 +44,12 @@ class LLWin(QWidget):
         # grid.addWidget(review, 3, 0)
         # grid.addWidget(reviewEdit, 3, 1, 5, 1)
 
+        qbtn = QPushButton('Выход', self)
+        qbtn.clicked.connect(self.closeEvent)
+        qbtn.resize(qbtn.sizeHint())
+
+        grid.addWidget(qbtn, 5, 3)
+
         self.setLayout(grid)
 
         self.show()
@@ -54,7 +61,12 @@ class LLWin(QWidget):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-
+    def closeEvent(self, event):
+        reply = QMessageBox.question(self, 'Message', "Are you sure to quit?", QMessageBox.Yes | QMessageBox.No, QMessageBox.No)
+        if reply == QMessageBox.Yes:
+            event.accept()
+        else:
+            event.ignore()
 
 #Создаются объекты application и LLWindow. Запускается основной цикл.
 if __name__ == '__main__':
